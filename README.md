@@ -11,7 +11,8 @@ With my webapp, the user can scroll through a list of all the possible beers. It
 
 
 ## Diagrams
-[diagrams.pdf](https://github.com/Coenmathijssen/web-app-from-scratch-1920/files/4200197/diagrams.pdf)
+![actor](https://user-images.githubusercontent.com/43337909/74465137-21a86880-4e95-11ea-857e-8fc8d67c7ebb.jpg)
+![interaction](https://user-images.githubusercontent.com/43337909/74465147-25d48600-4e95-11ea-8a73-fd1a5baf1221.jpg)
 
 ## API
 For my project I'm using the [BreweryDB](brewerydb.com/) API. This is an API which collect all possible data surrounding beers. I'm using two different endpoints: one for fetching the beers and one for fetching the breweries selling the corresponding beers. For plotting the location of the breweries, I made use of the Google Maps API. 
