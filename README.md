@@ -52,7 +52,7 @@ De website live zetten kan via Netlify.
 4. Change the directory to 'dist'.
 5. Press 'deploy site'.
 
-## Auteur 
+## Author 
 [Coen Mathijssen - GitHub](https://github.com/Coenmathijssen/)
 
 ## License
