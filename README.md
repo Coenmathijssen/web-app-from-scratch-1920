@@ -1,3 +1,5 @@
+<img width="1280" alt="Screenshot 2020-02-13 at 19 10 12" src="https://user-images.githubusercontent.com/43337909/74464941-c4141c00-4e94-11ea-9995-a05b087455c0.png">
+
 # Web App From Scratch @cmda-minor-web 1819
 
 In this course you will learn to build a web application without frameworks or unnecessary libraries, but with vanilla HTML, CSS & JavaScript as much as possible. The end result is a modular, single page web app (SPA). Data will be retrieved from an external API of your choice, manipulated and finally shown in the UI of the App. You will learn different ways to structure code and develope your own coding style. With the gained knowledge you will be able to build interactive prototypes, based on real data. Also you will gain a better understanding of the how API's, frameworks and libraries work.
@@ -6,6 +8,10 @@ In this course you will learn to build a web application without frameworks or u
 After a thorough search of API's I decided to lay my hands on the [BreweryDB](brewerydb.com/) API. The API is what the name sugests: a API containing a lot of information of beers. I'm a student after all ;). I regularly use an existing app where you can rate your beers and share it with friends. I wanted to do something similar. With this API, I have alot of options and oppertunities for designing my webapp. 
 
 With my webapp, the user can scroll through a list of all the possible beers. It's also possible to search (filter) for a certain beer, category or brewery. When the user clicks on a beer, details will appear. It is possible to take a look at the beer-style, the ABV, the creation date, an image, a description of the beer, etc. When the user likes the beer and wants to save it for later, it's possible to favorite the beer. The webapp will store those beers in a favorite page. With the help of a Google Maps API, it's also possible to get the route to the nearest corresponding brewery.
+
+
+## Diagrams
+[diagrams.pdf](https://github.com/Coenmathijssen/web-app-from-scratch-1920/files/4200197/diagrams.pdf)
 
 ## API
 For my project I'm using the [BreweryDB](brewerydb.com/) API. This is an API which collect all possible data surrounding beers. I'm using two different endpoints: one for fetching the beers and one for fetching the breweries selling the corresponding beers. For plotting the location of the breweries, I made use of the Google Maps API. 
