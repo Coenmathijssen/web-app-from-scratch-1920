@@ -45,11 +45,11 @@ body > section:nth-of-type(2) {
 
   .beer {
     width: calc(25% - 5em);
-    margin: 1em;
+    margin: 1.5em 1em;
     padding: 1em;
-    background-color: $light-blue-sec;
+    background-color: #edf1f5;
     border-radius: 10px;
-    box-shadow: 3px 3px 16px rgba(163,177,198,0.6), -3px -3px 16px rgba(255,255,255, 0.5);
+    // box-shadow: 3px 3px 16px rgba(163,177,198,0.6), -3px -3px 16px rgba(255,255,255, 0.5);
 
     img {
       width: calc(100% - 4em);
@@ -164,7 +164,7 @@ ul.meta {
     width: calc(50% - 5px);
     margin: 0;
     padding: 10px 0;
-    background-color: $light-blue;
+    background-color: #edf1f5;
     border-radius: 10px;
     color: $black;
     box-shadow: inset 3px 3px 8px rgba(163,177,198,0.3), inset -3px -3px 8px rgba(255,255,255, 0.25);

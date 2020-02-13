@@ -1,24 +1,9 @@
-const routie = require('./modules/routie.js')
-
-routie({
-  ':id': (id) => {
-    const data = JSON.parse(window.localStorage.getItem('data'))
-
-    const foundItem = matchItem(data, id)
-    detailAppear(foundItem)
-  },
-  'about': () => {
-    console.log('about')
-  }
-})
-
 function matchItem (data, id) {
   const foundItem = data.filter(found => { return found.id === id })
   return foundItem[0]
 }
 
-function detailAppear (data) {
-  console.log(data)
+function appear (data) {
   let image = document.getElementById('detail-image')
   let title = document.getElementById('detail-title')
   let abv = document.getElementById('detail-abv')
@@ -66,3 +51,5 @@ function detailAppear (data) {
   const detail = document.getElementsByClassName('detail')[0]
   detail.classList.add('visible')
 }
+
+module.exports = { matchItem, appear }

@@ -30,7 +30,7 @@
 
   & > div {
     width: calc( 100vw - 20vw);
-    height: 100vh;
+    height: 100%;
     padding: 0 10vw;
     display: flex;
     justify-content: center;
@@ -83,4 +83,8 @@
       }
     }
   }
+
 }
+  #map {
+    height: 400px;
+  }
