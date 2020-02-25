@@ -9,7 +9,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "parcel ./docs/index.html",
-    "build": "parcel build <your entry file>"
+    "build": "parcel build ./docs/index.html"
   },
   "repository": {
     "type": "git",
@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/Coenmathijssen/web-app-from-scratch-1920#readme",
   "devDependencies": {
+    "dotenv": "^8.2.0",
     "ejs": "^3.0.1",
     "parcel": "^1.12.4",
     "parcel-plugin-ejs-template": "^0.1.2"

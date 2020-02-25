@@ -8122,6 +8122,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.fetchData = fetchData;
+exports.fetchBreweries = fetchBreweries;
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
@@ -8180,8 +8181,47 @@ function _fetchData() {
   return _fetchData.apply(this, arguments);
 }
 
+function fetchBreweries(_x2) {
+  return _fetchBreweries.apply(this, arguments);
+}
+
+function _fetchBreweries() {
+  _fetchBreweries = _asyncToGenerator(
+  /*#__PURE__*/
+  regeneratorRuntime.mark(function _callee2(endpoint) {
+    var corsFix, apiUrl, key, response, data;
+    return regeneratorRuntime.wrap(function _callee2$(_context2) {
+      while (1) {
+        switch (_context2.prev = _context2.next) {
+          case 0:
+            corsFix = 'https://cors-anywhere.herokuapp.com/';
+            apiUrl = 'https://sandbox-api.brewerydb.com/v2/';
+            key = '73685041c0bfbe5aa327c0c735d3bb0c';
+            _context2.next = 5;
+            return fetch("".concat(corsFix).concat(apiUrl).concat(endpoint, "/?key=").concat(key));
+
+          case 5:
+            response = _context2.sent;
+            _context2.next = 8;
+            return response.json();
+
+          case 8:
+            data = _context2.sent;
+            return _context2.abrupt("return", data);
+
+          case 10:
+          case "end":
+            return _context2.stop();
+        }
+      }
+    }, _callee2);
+  }));
+  return _fetchBreweries.apply(this, arguments);
+}
+
 module.exports = {
-  fetchData: fetchData
+  fetchData: fetchData,
+  fetchBreweries: fetchBreweries
 };
 },{}],"js/assign.js":[function(require,module,exports) {
 "use strict";
@@ -8192,62 +8232,11 @@ Object.defineProperty(exports, "__esModule", {
 exports.data = data;
 
 function data(data) {
-  data.forEach(function (beer, i) {
-    // Select container
-    var container = document.getElementsByClassName('beer-list')[0]; // Create elements and add classes
-
-    var link = document.createElement('a');
-    link.classList.add('beer');
-    var newArticle = document.createElement('article');
-    var image = document.createElement('img');
-    image.classList.add('beer-image');
-    var title = document.createElement('h2');
-    title.classList.add('beer-title');
-    var ul = document.createElement('ul');
-    ul.classList.add('meta');
-    var abv = document.createElement('li');
-    abv.classList.add('abv');
-    var created = document.createElement('li');
-    created.classList.add('created');
-    var desc = document.createElement('p');
-    desc.classList.add('beer-desc'); // Fill evry created element with the right data
-
-    newArticle.setAttribute('id', data[i].id);
-    link.href = '#' + data[i].id;
-
-    if (data[i].labels) {
-      image.src = data[i].labels.large;
-    } else {
-      image.src = 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/1024px-No_image_available.svg.png';
-    } // Delete the time from the date
-
-
-    title.textContent = data[i].name;
-
-    if (data[i].abv === undefined) {
-      abv.textContent = 'alc. -%';
-    } else {
-      abv.textContent = 'alc. ' + data[i].abv + '%';
-    }
-
-    created.textContent = data[i].createDate.slice(0, -9); // Append everything
-
-    container.appendChild(link);
-    link.appendChild(newArticle);
-    newArticle.appendChild(image);
-    newArticle.appendChild(title);
-    ul.appendChild(abv);
-    ul.appendChild(created);
-    newArticle.appendChild(ul);
-
-    if (data[i].description === undefined) {
-      desc.textContent = 'No description available';
-      newArticle.appendChild(desc);
-    } else {
-      var text = data[i].description.match(/\b[\w']+(?:[^\w\n]+[\w']+){0,30}\b/g)[0] + '...';
-      desc.textContent = text;
-      newArticle.appendChild(desc);
-    }
+  // Select container
+  var container = document.getElementsByClassName('beer-list')[0];
+  container.innerHTML = "";
+  data.forEach(function (item, i) {
+    container.insertAdjacentHTML('afterbegin', "\n    <a href=\"#".concat(data[i].id, "\" class=\"beer\">\n      <article>\n        <img src=\"").concat(data[i].labels ? data[i].labels.large : 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/1024px-No_image_available.svg.png', "\" alt=\"beer label\" class=\"beer-image\">\n        <h2 class=\"beer-title\">").concat(data[i].name, "</h2>\n        <ul class=\"meta\">\n          <li class=\"abv\">").concat(data[i].abv === undefined ? 'alc. -%' : "alc.".concat(data[i].abv, " %"), "</li>\n          <li class=\"created\">").concat(data[i].createDate.slice(0, -9), "</li>\n        </ul>\n        <p class=\"beer-desc\">").concat(data[i].description === undefined ? 'No description available' : data[i].description.match(/\b[\w']+(?:[^\w\n]+[\w']+){0,30}\b/g)[0] + '...', "</p>\n      </article>\n    </a>"));
   });
 }
 
@@ -8315,6 +8304,96 @@ function appear(data) {
 module.exports = {
   matchItem: matchItem,
   appear: appear
+};
+},{}],"js/google.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.initMap = initMap;
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+function initMap(breweryGeo) {
+  console.log(breweryGeo);
+  var map = new google.maps.Map(document.getElementById('map'), {
+    zoom: 1.3,
+    center: {
+      lat: 52.37403,
+      lng: 4.88969
+    }
+  });
+  var icons = {
+    beer: {
+      icon: './beer-pin.00e7e96a.png'
+    }
+  };
+  var features = [{
+    position: new google.maps.LatLng(breweryGeo.lat, breweryGeo.lng),
+    type: 'beer'
+  }]; // Create markers.
+
+  for (var i = 0; i < features.length; i++) {
+    var marker = new google.maps.Marker({
+      position: features[i].position,
+      icon: icons[features[i].type].icon,
+      map: map
+    });
+  }
+}
+
+function getGeo(_x) {
+  return _getGeo.apply(this, arguments);
+}
+
+function _getGeo() {
+  _getGeo = _asyncToGenerator(
+  /*#__PURE__*/
+  regeneratorRuntime.mark(function _callee(address) {
+    var response, data, returnedData;
+    return regeneratorRuntime.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            _context.next = 2;
+            return fetch("https://maps.googleapis.com/maps/api/geocode/json?address=".concat(address, "&key=").concat("AIzaSyB3SgSfMzD9hWpz2Bwq93M89QJ6YT9q2-M"));
+
+          case 2:
+            response = _context.sent;
+            _context.next = 5;
+            return response.json();
+
+          case 5:
+            data = _context.sent;
+            returnedData = data.results[0];
+
+            if (returnedData.address_components[6]) {
+              _context.next = 12;
+              break;
+            }
+
+            window.alert('Brewery not found on map');
+            return _context.abrupt("return", null);
+
+          case 12:
+            return _context.abrupt("return", returnedData.geometry.location);
+
+          case 13:
+          case "end":
+            return _context.stop();
+        }
+      }
+    }, _callee);
+  }));
+  return _getGeo.apply(this, arguments);
+}
+
+module.exports = {
+  initMap: initMap,
+  getGeo: getGeo
 };
 },{}],"js/modules/routie.js":[function(require,module,exports) {
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -8547,11 +8626,9 @@ var _detailPage = _interopRequireDefault(require("./detailPage.js"));
 
 var _API = _interopRequireDefault(require("./API.js"));
 
+var _google = _interopRequireDefault(require("./google.js"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
 var routie = require('./modules/routie.js');
 
@@ -8562,8 +8639,14 @@ function renderDetailPage(data) {
 
       _detailPage.default.appear(foundItem);
 
-      fetchData("beer/".concat(_id, "/breweries")).then(function (data) {
-        console.log(data.data[0]);
+      _API.default.fetchBreweries("beer/".concat(_id, "/breweries")).then(function (data) {
+        var brewery = data.data[0].name;
+
+        var breweryGeo = _google.default.getGeo(brewery);
+
+        return breweryGeo;
+      }).then(function (breweryGeo) {
+        _google.default.initMap(breweryGeo);
       });
     },
     'about': function about() {
@@ -8572,81 +8655,36 @@ function renderDetailPage(data) {
   });
 }
 
-function fetchData(_x) {
-  return _fetchData.apply(this, arguments);
-}
-
-function _fetchData() {
-  _fetchData = _asyncToGenerator(
-  /*#__PURE__*/
-  regeneratorRuntime.mark(function _callee(endpoint) {
-    var corsFix, apiUrl, key, response, data;
-    return regeneratorRuntime.wrap(function _callee$(_context) {
-      while (1) {
-        switch (_context.prev = _context.next) {
-          case 0:
-            corsFix = 'https://cors-anywhere.herokuapp.com/';
-            apiUrl = 'https://sandbox-api.brewerydb.com/v2/';
-            key = '73685041c0bfbe5aa327c0c735d3bb0c';
-            _context.next = 5;
-            return fetch("".concat(corsFix).concat(apiUrl).concat(endpoint, "/?key=").concat(key));
-
-          case 5:
-            response = _context.sent;
-            _context.next = 8;
-            return response.json();
-
-          case 8:
-            data = _context.sent;
-            return _context.abrupt("return", data);
-
-          case 10:
-          case "end":
-            return _context.stop();
-        }
-      }
-    }, _callee);
-  }));
-  return _fetchData.apply(this, arguments);
-}
-
 module.exports = {
   renderDetailPage: renderDetailPage
 };
-},{"./detailPage.js":"js/detailPage.js","./API.js":"js/API.js","./modules/routie.js":"js/modules/routie.js"}],"js/map.js":[function(require,module,exports) {
-function initMap() {
-  var map = new google.maps.Map(document.getElementById('map'), {
-    zoom: 1,
-    center: {
-      lat: 52.37403,
-      lng: 4.88969
-    }
+},{"./detailPage.js":"js/detailPage.js","./API.js":"js/API.js","./google.js":"js/google.js","./modules/routie.js":"js/modules/routie.js"}],"js/data.js":[function(require,module,exports) {
+// Sort data functions
+function sort(data) {
+  return data.sort(function (a, b) {
+    return a.name.localeCompare(b.name);
   });
-  var icons = {
-    beer: {
-      icon: './beer-pin.00e7e96a.png'
-    }
-  };
-  var features = [{
-    position: new google.maps.LatLng(-33.91721, 151.22630),
-    type: 'beer'
-  }, {
-    position: new google.maps.LatLng(-33.91539, 151.22820),
-    type: 'beer'
-  }]; // Create markers.
-
-  for (var i = 0; i < features.length; i++) {
-    var marker = new google.maps.Marker({
-      position: features[i].position,
-      icon: icons[features[i].type].icon,
-      map: map
-    });
-  }
-
-  ;
 }
 
-initMap();
+function sortReverse(data) {
+  return data.sort(function (a, b) {
+    return b.name.localeCompare(a.name);
+  });
+}
+
+function search(data) {
+  var input = document.getElementById('search');
+  var filteredData = data.filter(function (beer) {
+    return beer.name.indexOf(input.value) > -1;
+  });
+  return filteredData;
+}
+
+module.exports = {
+  sort: sort,
+  sortReverse: sortReverse,
+  search: search
+};
 },{}],"js/app.js":[function(require,module,exports) {
 "use strict";
 
@@ -8658,15 +8696,14 @@ var _assign = _interopRequireDefault(require("./assign.js"));
 
 var _router = _interopRequireDefault(require("./router.js"));
 
-var _map = _interopRequireDefault(require("./map.js"));
+var _data = _interopRequireDefault(require("./data.js"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // Importing polyfill to make async functions work in Parcel
 // Importing all functions
 // Starting initiziation
-init(); // Initialize map
-// Map.init()
+init();
 
 function init() {
   _API.default.fetchData('beers').then(function (data) {
@@ -8677,7 +8714,7 @@ function init() {
 
     _router.default.renderDetailPage(data);
   });
-} // Toggle classes
+} // Toggle classes to let detailpage appear
 
 
 var close = document.getElementsByClassName('close')[0];
@@ -8686,8 +8723,36 @@ close.addEventListener('click', detailDisappear);
 function detailDisappear() {
   var detail = document.getElementsByClassName('detail')[0];
   detail.classList.remove('visible');
+} // Filter and sort
+
+
+function renderFilteredData() {
+  var data = JSON.parse(window.localStorage.getItem('data'));
+
+  _assign.default.data(_data.default.sort(data));
 }
-},{"babel-polyfill":"../node_modules/babel-polyfill/lib/index.js","./API.js":"js/API.js","./assign.js":"js/assign.js","./router.js":"js/router.js","./map.js":"js/map.js"}],"../node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+
+function renderFilteredDataReverse() {
+  var data = JSON.parse(window.localStorage.getItem('data'));
+
+  _assign.default.data(_data.default.sortReverse(data));
+}
+
+function search() {
+  var data = JSON.parse(window.localStorage.getItem('data'));
+  console.log(_data.default.search(data));
+
+  _assign.default.data(_data.default.search(data));
+} // Trigger filter on keyup
+
+
+var alphabetical = document.getElementsByClassName('a-z')[0];
+alphabetical.addEventListener('click', renderFilteredData);
+var alphabeticalReverse = document.getElementsByClassName('z-a')[0];
+alphabeticalReverse.addEventListener('click', renderFilteredDataReverse);
+var input = document.getElementById('search');
+input.addEventListener('keyup', search);
+},{"babel-polyfill":"../node_modules/babel-polyfill/lib/index.js","./API.js":"js/API.js","./assign.js":"js/assign.js","./router.js":"js/router.js","./data.js":"js/data.js"}],"../node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -8715,7 +8780,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55902" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "60463" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

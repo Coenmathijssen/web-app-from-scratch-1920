@@ -4,14 +4,14 @@ function matchItem (data, id) {
 }
 
 function appear (data) {
-  let image = document.getElementById('detail-image')
-  let title = document.getElementById('detail-title')
-  let abv = document.getElementById('detail-abv')
-  let created = document.getElementById('detail-created')
-  let type = document.getElementById('detail-type')
-  let organic = document.getElementById('detail-organic')
-  let production = document.getElementById('detail-production')
-  let description = document.getElementById('detail-description')
+  const image = document.getElementById('detail-image')
+  const title = document.getElementById('detail-title')
+  const abv = document.getElementById('detail-abv')
+  const created = document.getElementById('detail-created')
+  const type = document.getElementById('detail-type')
+  const organic = document.getElementById('detail-organic')
+  const production = document.getElementById('detail-production')
+  const description = document.getElementById('detail-description')
 
   if (data.labels) {
     image.src = data.labels.large

@@ -1,10 +1,13 @@
 .detail {
   position: fixed;
+  height: 40vh;
+  padding-top: 60vh;
   top: 0;
   right: 0;
   width: 0;
   background-color: $blue;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: scroll;
   z-index: 99;
   transition: all .7s ease-in-out;
 
@@ -59,6 +62,12 @@
         font-size: 3em;
       }
 
+      h2:nth-of-type(2) {
+        margin-top: 5vh;
+        margin-bottom: 2vh;
+        font-size: 2em;
+      }
+
       p {
         opacity: 0.8;
         text-align: left;
@@ -83,8 +92,8 @@
       }
     }
   }
-
 }
-  #map {
-    height: 400px;
-  }
+
+#map {
+  height: 250px;
+}

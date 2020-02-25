@@ -5,13 +5,10 @@ import 'babel-polyfill'
 import API from './API.js'
 import Assign from './assign.js'
 import Router from './router.js'
-import Map from './map.js'
+import Data from './data.js'
 
 // Starting initiziation
 init()
-
-// Initialize map
-// Map.init()
 
 function init () {
   API.fetchData('beers').then(data => {
@@ -25,7 +22,7 @@ function init () {
   })
 }
 
-// Toggle classes
+// Toggle classes to let detailpage appear
 const close = document.getElementsByClassName('close')[0]
 close.addEventListener('click', detailDisappear)
 
@@ -33,3 +30,30 @@ function detailDisappear () {
   const detail = document.getElementsByClassName('detail')[0]
   detail.classList.remove('visible')
 }
+
+// Filter and sort
+function renderFilteredData () {
+  const data = JSON.parse(window.localStorage.getItem('data'))
+  Assign.data(Data.sort(data))
+}
+
+function renderFilteredDataReverse () {
+  const data = JSON.parse(window.localStorage.getItem('data'))
+  Assign.data(Data.sortReverse(data))
+}
+
+function search () {
+  const data = JSON.parse(window.localStorage.getItem('data'))
+  console.log(Data.search(data))
+  Assign.data(Data.search(data))
+}
+
+// Trigger filter on keyup
+const alphabetical = document.getElementsByClassName('a-z')[0]
+alphabetical.addEventListener('click', renderFilteredData)
+
+const alphabeticalReverse = document.getElementsByClassName('z-a')[0]
+alphabeticalReverse.addEventListener('click', renderFilteredDataReverse)
+
+const input = document.getElementById('search')
+input.addEventListener('keyup', search)

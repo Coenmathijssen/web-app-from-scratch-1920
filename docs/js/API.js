@@ -17,4 +17,14 @@ export async function fetchData (endpoint) {
   }
 }
 
-module.exports = { fetchData }
+export async function fetchBreweries (endpoint) {
+  const corsFix = 'https://cors-anywhere.herokuapp.com/'
+  const apiUrl = 'https://sandbox-api.brewerydb.com/v2/'
+  const key = '73685041c0bfbe5aa327c0c735d3bb0c'
+
+  const response = await fetch(`${corsFix}${apiUrl}${endpoint}/?key=${key}`)
+  const data = await response.json()
+  return data
+}
+
+module.exports = { fetchData, fetchBreweries }

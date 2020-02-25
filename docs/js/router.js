@@ -1,5 +1,6 @@
 import detailPage from './detailPage.js'
 import API from './API.js'
+import Google from './google.js'
 const routie = require('./modules/routie.js')
 
 
@@ -9,24 +10,18 @@ function renderDetailPage (data) {
       const foundItem = detailPage.matchItem(data, id)
       detailPage.appear(foundItem)
 
-      fetchData(`beer/${id}/breweries`).then(data => {
-        console.log(data.data[0])
+      API.fetchBreweries(`beer/${id}/breweries`).then(data => {
+        const brewery = data.data[0].name
+        const breweryGeo = Google.getGeo(brewery)
+        return breweryGeo
+      }).then(breweryGeo => {
+         Google.initMap(breweryGeo)
       })
     },
     'about': () => {
       console.log('about')
     }
   })
-}
-
-async function fetchData (endpoint) {
-  const corsFix = 'https://cors-anywhere.herokuapp.com/'
-  const apiUrl = 'https://sandbox-api.brewerydb.com/v2/'
-  const key = '73685041c0bfbe5aa327c0c735d3bb0c'
-
-  const response = await fetch(`${corsFix}${apiUrl}${endpoint}/?key=${key}`)
-  const data = await response.json()
-  return data
 }
 
 module.exports = { renderDetailPage }
