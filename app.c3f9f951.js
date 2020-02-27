@@ -8115,7 +8115,62 @@ define(String.prototype, "padRight", "".padEnd);
 "pop,reverse,shift,keys,values,entries,indexOf,every,some,forEach,map,filter,find,findIndex,includes,join,slice,concat,push,splice,unshift,sort,lastIndexOf,reduce,reduceRight,copyWithin,fill".split(",").forEach(function (key) {
   [][key] && define(Array, key, Function.call.bind([][key]));
 });
-},{"core-js/shim":"../node_modules/core-js/shim.js","regenerator-runtime/runtime":"../node_modules/babel-polyfill/node_modules/regenerator-runtime/runtime.js","core-js/fn/regexp/escape":"../node_modules/core-js/fn/regexp/escape.js"}],"js/API.js":[function(require,module,exports) {
+},{"core-js/shim":"../node_modules/core-js/shim.js","regenerator-runtime/runtime":"../node_modules/babel-polyfill/node_modules/regenerator-runtime/runtime.js","core-js/fn/regexp/escape":"../node_modules/core-js/fn/regexp/escape.js"}],"js/data.js":[function(require,module,exports) {
+// Sort data functions
+function sort(data) {
+  return data.sort(function (a, b) {
+    return a.name.localeCompare(b.name);
+  });
+}
+
+function sortReverse(data) {
+  return data.sort(function (a, b) {
+    return b.name.localeCompare(a.name);
+  });
+}
+
+function search(data) {
+  var input = document.getElementById('search');
+  var filteredData = data.filter(function (beer) {
+    return beer.name.indexOf(input.value) > -1;
+  });
+  return filteredData;
+}
+
+function clean(data) {
+  return data.map(function (beer) {
+    var image;
+    beer.labels ? image = beer.labels.large : image = 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/1024px-No_image_available.svg.png';
+    var abv;
+    beer.abv === undefined ? abv = 'alc. -%' : abv = 'alc. ' + beer.abv + '%';
+    var type;
+    beer.style ? type = beer.style.shortName : type = 'No name available';
+    var descShort;
+    beer.style === undefined ? descShort = 'No description available' : descShort = beer.style.description.match(/\b[\w']+(?:[^\w\n]+[\w']+){0,30}\b/g)[0] + '...';
+    var descLong;
+    beer.style === undefined ? descLong = 'No description available' : descLong = beer.style.description;
+    return {
+      id: beer.id,
+      name: beer.name,
+      abv: abv,
+      isOrganic: beer.isOrganic,
+      isRetired: beer.isRetired,
+      image: image,
+      date: beer.createDate.slice(0, -9),
+      type: type,
+      descShort: descShort,
+      descLong: descLong
+    };
+  });
+}
+
+module.exports = {
+  sort: sort,
+  sortReverse: sortReverse,
+  search: search,
+  clean: clean
+};
+},{}],"js/API.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -8123,6 +8178,10 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.fetchData = fetchData;
 exports.fetchBreweries = fetchBreweries;
+
+var _data = _interopRequireDefault(require("./data.js"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
@@ -8147,31 +8206,33 @@ function _fetchData() {
             key = '73685041c0bfbe5aa327c0c735d3bb0c';
 
             if (!(window.localStorage.getItem('data') === null)) {
-              _context.next = 16;
+              _context.next = 18;
               break;
             }
 
-            _context.next = 6;
+            enableLoader();
+            _context.next = 7;
             return fetch("".concat(corsFix).concat(apiUrl).concat(endpoint, "/?key=").concat(key));
 
-          case 6:
+          case 7:
             response = _context.sent;
-            _context.next = 9;
+            _context.next = 10;
             return response.json();
 
-          case 9:
+          case 10:
             data = _context.sent;
             console.log('Recieved data from fetch, status:', data.status);
-            dataClean = data.data;
+            console.log(data.data);
+            dataClean = _data.default.clean(data.data);
             window.localStorage.setItem('data', JSON.stringify(dataClean));
             return _context.abrupt("return", dataClean);
 
-          case 16:
+          case 18:
             _dataClean = JSON.parse(window.localStorage.getItem('data'));
             console.log('Data received from local storage');
             return _context.abrupt("return", _dataClean);
 
-          case 19:
+          case 21:
           case "end":
             return _context.stop();
         }
@@ -8219,11 +8280,16 @@ function _fetchBreweries() {
   return _fetchBreweries.apply(this, arguments);
 }
 
+function enableLoader() {
+  var loader = document.getElementsByClassName('loader')[0];
+  loader.classList.add('visible');
+}
+
 module.exports = {
   fetchData: fetchData,
   fetchBreweries: fetchBreweries
 };
-},{}],"js/assign.js":[function(require,module,exports) {
+},{"./data.js":"js/data.js"}],"js/assign.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -8233,10 +8299,12 @@ exports.data = data;
 
 function data(data) {
   // Select container
-  var container = document.getElementsByClassName('beer-list')[0];
-  container.innerHTML = "";
+  var container = document.getElementsByClassName('beer-list')[0]; // Clear data
+
+  container.innerHTML = ''; // Render data
+
   data.forEach(function (item, i) {
-    container.insertAdjacentHTML('afterbegin', "\n    <a href=\"#".concat(data[i].id, "\" class=\"beer\">\n      <article>\n        <img src=\"").concat(data[i].labels ? data[i].labels.large : 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/1024px-No_image_available.svg.png', "\" alt=\"beer label\" class=\"beer-image\">\n        <h2 class=\"beer-title\">").concat(data[i].name, "</h2>\n        <ul class=\"meta\">\n          <li class=\"abv\">").concat(data[i].abv === undefined ? 'alc. -%' : "alc.".concat(data[i].abv, " %"), "</li>\n          <li class=\"created\">").concat(data[i].createDate.slice(0, -9), "</li>\n        </ul>\n        <p class=\"beer-desc\">").concat(data[i].description === undefined ? 'No description available' : data[i].description.match(/\b[\w']+(?:[^\w\n]+[\w']+){0,30}\b/g)[0] + '...', "</p>\n      </article>\n    </a>"));
+    container.insertAdjacentHTML('afterbegin', "\n    <a href=\"#".concat(data[i].id, "\" class=\"beer\">\n      <article>\n        <img src=\"").concat(data[i].image, "\">\n        <h2 class=\"beer-title\">").concat(data[i].name, "</h2>\n        <ul class=\"meta\">\n          <li class=\"abv\">").concat(data[i].abv, "</li>\n          <li class=\"created\">").concat(data[i].date, "</li>\n        </ul>\n        <p class=\"beer-desc\">").concat(data[i].descShort, "</p>\n      </article>\n    </a>"));
   });
 }
 
@@ -8259,43 +8327,23 @@ function appear(data) {
   var type = document.getElementById('detail-type');
   var organic = document.getElementById('detail-organic');
   var production = document.getElementById('detail-production');
-  var description = document.getElementById('detail-description');
+  var description = document.getElementById('detail-description'); // Assign image
 
-  if (data.labels) {
-    image.src = data.labels.large;
-  } else {
-    image.src = 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/1024px-No_image_available.svg.png';
-  }
+  image.src = data.image; // Assign title
 
-  title.textContent = data.name;
+  title.textContent = data.name; // Assign abv
 
-  if (data.abv === undefined) {
-    abv.textContent = 'alc. -%';
-  } else {
-    abv.textContent = 'alc. ' + data.abv + '%';
-  }
+  abv.textContent = data.abv; // Assign creation date
 
-  created.textContent = data.createDate.slice(0, -9);
+  created.textContent = data.date; // Assign type
 
-  if (data.style) {
-    type.textContent = data.style.shortName;
-    description.textContent = data.style.description;
-  } else {
-    type.textContent = 'No name available';
-    description.textContent = 'No description available';
-  }
+  type.textContent = data.type; // Assign description
 
-  if (data.isOrganic === 'N') {
-    organic.src = './cross.f1a68627.svg';
-  } else {
-    organic.src = './check.74abe2b1.svg';
-  }
+  description.textContent = data.descLong; // Check if the beer is organic and display a cross or check correspondently
 
-  if (data.isRetired !== 'N') {
-    production.src = './cross.f1a68627.svg';
-  } else {
-    production.src = './check.74abe2b1.svg';
-  }
+  data.isOrganic === 'N' ? organic.src = './cross.f1a68627.svg' : organic.src = './check.74abe2b1.svg'; // Check if the beer is still in production and display a cross or check correspondently
+
+  data.isRetired !== 'N' ? production.src = './cross.f1a68627.svg' : production.src = './check.74abe2b1.svg'; // Display the detailpage with a class add
 
   var detail = document.getElementsByClassName('detail')[0];
   detail.classList.add('visible');
@@ -8658,34 +8706,7 @@ function renderDetailPage(data) {
 module.exports = {
   renderDetailPage: renderDetailPage
 };
-},{"./detailPage.js":"js/detailPage.js","./API.js":"js/API.js","./google.js":"js/google.js","./modules/routie.js":"js/modules/routie.js"}],"js/data.js":[function(require,module,exports) {
-// Sort data functions
-function sort(data) {
-  return data.sort(function (a, b) {
-    return a.name.localeCompare(b.name);
-  });
-}
-
-function sortReverse(data) {
-  return data.sort(function (a, b) {
-    return b.name.localeCompare(a.name);
-  });
-}
-
-function search(data) {
-  var input = document.getElementById('search');
-  var filteredData = data.filter(function (beer) {
-    return beer.name.indexOf(input.value) > -1;
-  });
-  return filteredData;
-}
-
-module.exports = {
-  sort: sort,
-  sortReverse: sortReverse,
-  search: search
-};
-},{}],"js/app.js":[function(require,module,exports) {
+},{"./detailPage.js":"js/detailPage.js","./API.js":"js/API.js","./google.js":"js/google.js","./modules/routie.js":"js/modules/routie.js"}],"js/app.js":[function(require,module,exports) {
 "use strict";
 
 require("babel-polyfill");
@@ -8707,6 +8728,7 @@ init();
 
 function init() {
   _API.default.fetchData('beers').then(function (data) {
+    disableLoader();
     console.log('We got dem data: ', data); // Assign data to overview
 
     _assign.default.data(data); // Render detailpage on click with router
@@ -8752,6 +8774,11 @@ var alphabeticalReverse = document.getElementsByClassName('z-a')[0];
 alphabeticalReverse.addEventListener('click', renderFilteredDataReverse);
 var input = document.getElementById('search');
 input.addEventListener('keyup', search);
+
+function disableLoader() {
+  var loader = document.getElementsByClassName('loader')[0];
+  loader.classList.remove('visible');
+}
 },{"babel-polyfill":"../node_modules/babel-polyfill/lib/index.js","./API.js":"js/API.js","./assign.js":"js/assign.js","./router.js":"js/router.js","./data.js":"js/data.js"}],"../node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -8780,7 +8807,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "60463" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55883" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
