@@ -6,7 +6,7 @@ export function initMap (breweryGeo) {
       center: { lat: 52.37403, lng: 4.88969 }
     })
 
-  let icons = {
+  const icons = {
     beer: {
       icon: './beer-pin.00e7e96a.png'
     }
@@ -30,9 +30,9 @@ export function initMap (breweryGeo) {
 }
 
 async function getGeo (address) {
-  let response = await (await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${process.env.key}`))
-  let data = await response.json()
-  let returnedData = data.results[0]
+  const response = await (await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${process.env.key}`))
+  const data = await response.json()
+  const returnedData = data.results[0]
   if (!returnedData.address_components[6]) {
     window.alert('Brewery not found on map')
     return null

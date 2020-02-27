@@ -13,41 +13,31 @@ function appear (data) {
   const production = document.getElementById('detail-production')
   const description = document.getElementById('detail-description')
 
-  if (data.labels) {
-    image.src = data.labels.large
-  } else {
-    image.src = 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/1024px-No_image_available.svg.png'
-  }
+  // Assign image
+  image.src = data.image
 
+  // Assign title
   title.textContent = data.name
 
-  if (data.abv === undefined) {
-    abv.textContent = 'alc. -%'
-  } else {
-    abv.textContent = 'alc. ' + data.abv + '%'
-  }
-  created.textContent = data.createDate.slice(0, -9)
+  // Assign abv
+  abv.textContent = data.abv
 
-  if (data.style) {
-    type.textContent = data.style.shortName
-    description.textContent = data.style.description
-  } else {
-    type.textContent = 'No name available'
-    description.textContent = 'No description available'
-  }
+  // Assign creation date
+  created.textContent = data.date
 
-  if (data.isOrganic === 'N') {
-    organic.src = './cross.f1a68627.svg'
-  } else {
-    organic.src = './check.74abe2b1.svg'
-  }
+  // Assign type
+  type.textContent = data.type
 
-  if (data.isRetired !== 'N') {
-    production.src = './cross.f1a68627.svg'
-  } else {
-    production.src = './check.74abe2b1.svg'
-  }
+  // Assign description
+  description.textContent = data.descLong
 
+  // Check if the beer is organic and display a cross or check correspondently
+  data.isOrganic === 'N' ? organic.src = './cross.f1a68627.svg' : organic.src = './check.74abe2b1.svg'
+
+  // Check if the beer is still in production and display a cross or check correspondently
+  data.isRetired !== 'N' ? production.src = './cross.f1a68627.svg' : production.src = './check.74abe2b1.svg'
+
+  // Display the detailpage with a class add
   const detail = document.getElementsByClassName('detail')[0]
   detail.classList.add('visible')
 }

@@ -12,6 +12,7 @@ init()
 
 function init () {
   API.fetchData('beers').then(data => {
+    disableLoader()
     console.log('We got dem data: ', data)
 
     // Assign data to overview
@@ -57,3 +58,10 @@ alphabeticalReverse.addEventListener('click', renderFilteredDataReverse)
 
 const input = document.getElementById('search')
 input.addEventListener('keyup', search)
+
+
+function disableLoader () {
+  const loader = document.getElementsByClassName('loader')[0]
+  loader.classList.remove('visible')
+}
+
