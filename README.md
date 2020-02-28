@@ -9,13 +9,23 @@ After a thorough search of API's I decided to lay my hands on the [BreweryDB](br
 
 With my webapp, the user can scroll through a list of all the possible beers. It's also possible to search (filter) for a certain beer, category or brewery. When the user clicks on a beer, details will appear. It is possible to take a look at the beer-style, the ABV, the creation date, an image, a description of the beer, etc. When the user likes the beer and wants to save it for later, it's possible to favorite the beer. The webapp will store those beers in a favorite page. With the help of a Google Maps API, it's also possible to get the route to the nearest corresponding brewery.
 
+## Features
+- Fetching data from API
+- Cleaning, sorting and filtering data
+- Rendering API data in HTML
+- Convert streetname to GEO location using the GeoCoder API from Google
+- Displaying the location of the brewery of the corresponding beer through the Google Maps API
+
 
 ## Diagrams
-![actor](https://user-images.githubusercontent.com/43337909/74465137-21a86880-4e95-11ea-857e-8fc8d67c7ebb.jpg)
-![interaction](https://user-images.githubusercontent.com/43337909/74465147-25d48600-4e95-11ea-8a73-fd1a5baf1221.jpg)
+![actor-diagram-d-02](https://user-images.githubusercontent.com/43337909/75491759-c14a1880-59b6-11ea-8b8d-4877cec57631.png)
+![interaction-diagram-d-01](https://user-images.githubusercontent.com/43337909/75491808-d2932500-59b6-11ea-92bf-0d73b5d399b0.png)
 
 ## API
 For my project I'm using the [BreweryDB](brewerydb.com/) API. This is an API which collect all possible data surrounding beers. I'm using two different endpoints: one for fetching the beers and one for fetching the breweries selling the corresponding beers. For plotting the location of the breweries, I made use of the Google Maps API. 
+
+### Data structure
+<img width="1061" alt="Screenshot 2020-02-27 at 23 16 45" src="https://user-images.githubusercontent.com/43337909/75492070-47665f00-59b7-11ea-931f-c557619812f8.png">
 
 ## Install
 1. Open the terminal on your computer.
@@ -40,12 +50,12 @@ These command are editable in the package.json file
 6. Open the localhost to view the webapp.
 
 ## Deployment
-De website live zetten kan via GitHub Pages. 
+Deploy website on GitHub pages.
 1. Create a repository and paste the bundle.js, html and css files.
 2. Go to the settings tab in your repository.
 3. Scroll to Github Pages and activate.
 
-De website live zetten kan via Netlify.
+Deploy website on Netlify.
 1. Ga to https://www.netlify.com/ en sign in (or create an account).
 2. Click on the button 'new site from git'.
 3. Connect the Git repo to your Netlify.
@@ -56,4 +66,4 @@ De website live zetten kan via Netlify.
 [Coen Mathijssen - GitHub](https://github.com/Coenmathijssen/)
 
 ## License
-This project is licensed under the MIT License - see the [LICENSE](https://github.com/Wiebsonice/functional-programming/blob/master/LICENSE) file for details
+This project is licensed under the MIT License - see the [LICENSE](https://github.com/Wiebsonice/functional-programming/blob/master/LICENSE) file for details 
